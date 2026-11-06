@@ -204,4 +204,3 @@ window.customCards.push({
   name: "Calendar Clock Card",
   description: "Analoge Kalenderuhr mit Wischsteuerung nur in der Mitte."
 });
-

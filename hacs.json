@@ -1,1 +1,6 @@
-
+{
+  "name": "Calendar Clock Card",
+  "content_in_root": true,
+  "filename": "calendar-clock-card.js",
+  "render_readme": true
+}
