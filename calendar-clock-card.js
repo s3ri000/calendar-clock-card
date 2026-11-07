@@ -47,7 +47,7 @@ class CalendarClockCard extends HTMLElement {
     if (!events.length) this._selected = 0;
 
     const now = new Date();
-    const cx = 320, cy = 320;
+    const cx = 400, cy = 320;
     const colors = [
       "#ff9d32", "#62c8ff", "#b48cff", "#55d6a3", "#ff6f91",
       "#f4cf58", "#6f9cff", "#ff9966", "#7bd1cf", "#d78cff",
@@ -106,7 +106,7 @@ class CalendarClockCard extends HTMLElement {
         const angle = (h * 30 - 90) * Math.PI / 180;
         const side = Math.cos(angle) >= 0 ? "right" : "left";
         const anchor = point(longest.r, h);
-        const elbow = point(183, h);
+        const elbow = point(178, h);
         const title = String(event.summary || "Termin").replace(/\s+/g, " ").trim();
         const time = allDay ? "Ganztägig" :
           `${start.toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"})}–${end.toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"})}`;
@@ -120,7 +120,7 @@ class CalendarClockCard extends HTMLElement {
     // Labels are split into left/right columns and assigned non-overlapping vertical slots.
     const distribute = side => {
       const items = labelItems.filter(x => x.side === side).sort((a,b) => a.anchor[1] - b.anchor[1]);
-      const top = 82, bottom = 558, gap = 38;
+      const top = 72, bottom = 568, gap = items.length > 1 ? Math.min(46, 496 / (items.length - 1)) : 46;
       items.forEach((item, idx) => {
         item.labelY = Math.max(top + idx * gap, item.anchor[1]);
       });
@@ -141,35 +141,35 @@ class CalendarClockCard extends HTMLElement {
 
     const leaders = labelItems.map(item => {
       const isRight = item.side === "right";
-      const edgeX = isRight ? 492 : 148;
-      const textX = isRight ? 500 : 140;
-      const anchorText = isRight ? "start" : "end";
+      const edgeX = isRight ? 772 : 28;
+      const textX = isRight ? 788 : 12;
+      const anchorText = isRight ? "end" : "start";
       const y = item.labelY;
       const selected = item.i === this._selected;
       const path = `M${item.anchor[0]} ${item.anchor[1]} L${item.elbow[0]} ${item.elbow[1]} L${edgeX} ${y} `;
       return `<path d="${path}" fill="none" stroke="${item.color}" stroke-width="${selected ? 1.8 : 1.1}" stroke-opacity=".9"/>
         <circle cx="${item.anchor[0]}" cy="${item.anchor[1]}" r="3" fill="${item.color}"/>
         <text x="${textX}" y="${y-3}" text-anchor="${anchorText}"
-          fill="${item.color}" font-size="12" font-weight="${selected ? 700 : 500}">${this._escape(item.text)}</text>
+          fill="${item.color}" font-size="15" font-weight="${selected ? 700 : 500}">${this._escape(item.text)}</text>
         <text x="${textX}" y="${y+11}" text-anchor="${anchorText}"
-          fill="#aab5ca" font-size="9">${this._escape(item.time)}</text>`;
+          fill="#aab5ca" font-size="11">${this._escape(item.time)}</text>`;
     }).join("");
 
     const marks = Array.from({ length: 60 }, (_, i) => {
-      const a = i * Math.PI / 30, r1 = 126, r2 = i % 5 === 0 ? 116 : 121;
+      const a = i * Math.PI / 30, r1 = 116, r2 = i % 5 === 0 ? 106 : 111;
       return `<line x1="${cx+r1*Math.sin(a)}" y1="${cy-r1*Math.cos(a)}"
         x2="${cx+r2*Math.sin(a)}" y2="${cy-r2*Math.cos(a)}"
         stroke="#75819b" stroke-width="${i%5 === 0 ? 1.5 : .7}"/>`;
     }).join("");
 
     const labels = Array.from({ length: 12 }, (_, i) => {
-      const p = point(103, i), n = i === 0 ? 12 : i;
+      const p = point(96, i), n = i === 0 ? 12 : i;
       return `<text x="${p[0]}" y="${p[1]+4}" fill="#e4eaf7"
         font-size="12" text-anchor="middle">${n}</text>`;
     }).join("");
 
-    const hp = point(55, now.getHours() % 12 + now.getMinutes() / 60);
-    const mp = point(78, now.getMinutes() / 60);
+    const hp = point(48, now.getHours() % 12 + now.getMinutes() / 60);
+    const mp = point(70, now.getMinutes() / 60);
     const ev = events[this._selected];
     const start = ev ? new Date(ev.start) : null;
     const end = ev ? new Date(ev.end) : null;
@@ -180,10 +180,10 @@ class CalendarClockCard extends HTMLElement {
       <style>
         :host { display:block; }
         ha-card { background:#080e20; border-radius:24px; padding:8px; box-shadow:none; overflow:hidden; color:white; }
-        .clock { max-width:640px; margin:auto; position:relative; }
+        .clock { max-width:800px; margin:auto; position:relative; }
         svg { display:block; width:100%; height:auto; }
         .middle { position:absolute; left:50%; top:50%; transform:translate(-50%,-30%);
-          width:30%; min-height:90px; padding:4px; box-sizing:border-box;
+          width:25%; min-height:90px; padding:4px; box-sizing:border-box;
           display:flex; flex-direction:column; justify-content:center; align-items:center;
           text-align:center; user-select:none; -webkit-user-select:none; touch-action:pan-y; cursor:grab; }
         .middle:active { cursor:grabbing; }
@@ -194,15 +194,15 @@ class CalendarClockCard extends HTMLElement {
       </style>
       <ha-card>
         <div class="clock">
-          <svg viewBox="0 0 640 640" role="img" aria-label="Kalenderuhr mit Terminbeschriftungen">
-            <circle cx="320" cy="320" r="160" fill="none" stroke="#27334e" stroke-width="8"/>
-            <circle cx="320" cy="320" r="143" fill="none" stroke="#27334e" stroke-width="8"/>
+          <svg viewBox="0 0 800 640" role="img" aria-label="Kalenderuhr mit Terminbeschriftungen">
+            <circle cx="400" cy="320" r="160" fill="none" stroke="#27334e" stroke-width="8"/>
+            <circle cx="400" cy="320" r="143" fill="none" stroke="#27334e" stroke-width="8"/>
             ${bars}${marks}${labels}${leaders}
-            <text x="320" y="153" fill="#8491ac" font-size="8" text-anchor="middle">12–24 UHR</text>
-            <text x="320" y="174" fill="#8491ac" font-size="8" text-anchor="middle">00–12 UHR</text>
-            <line x1="320" y1="320" x2="${hp[0]}" y2="${hp[1]}" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="320" y1="320" x2="${mp[0]}" y2="${mp[1]}" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="320" cy="320" r="5" fill="#ff9d32"/>
+            <text x="400" y="153" fill="#8491ac" font-size="8" text-anchor="middle">12–24 UHR</text>
+            <text x="400" y="174" fill="#8491ac" font-size="8" text-anchor="middle">00–12 UHR</text>
+            <line x1="400" y1="320" x2="${hp[0]}" y2="${hp[1]}" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <line x1="400" y1="320" x2="${mp[0]}" y2="${mp[1]}" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="400" cy="320" r="5" fill="#ff9d32"/>
           </svg>
           <div class="middle">
             <div class="count">TERMIN ${events.length ? this._selected + 1 : 0}/${events.length}</div>
